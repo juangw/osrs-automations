@@ -5,9 +5,18 @@ import java.util.Random;
 
 public class AutoClicker {
 
-    public static int rate = 0;
+    private static Integer rate = 0;
+    private static String keyToPress;
+    private static Integer timeToWait;
+    private static Boolean debugMode = false;
 
     public static void main(final String[] args) {
+        keyToPress = args[0];
+        timeToWait = Integer.parseInt(args[1]);
+        if (args.length == 3) {
+            debugMode = Boolean.parseBoolean(args[3]);
+        }
+
         while (rate == 0) {
             try {
                 System.out.println("Speed of the auto-clicker (in miliseconds):");
@@ -29,58 +38,70 @@ public class AutoClicker {
             // Get starting location
             final Point startingPoint = getCurrentPoint();
 
-            Integer[] offsets = {0, 0};
+            Integer[] offsets = { 0, 0 };
             while (true) {
                 try {
                     final Random r = new Random();
-                    int sleep = r.nextInt(rate) + 200;
-                    Thread.sleep(rate);
-                    
+                    Integer sleep = r.nextInt(rate) + 200;
+                    Thread.sleep(sleep);
+
                     Point point = getCurrentPoint();
-                    System.out.println(point.getX()); 
+                    System.out.println(point.getX());
                     System.out.println(point.getY());
 
-                    //if (true) {
-                    //    continue;
-                    //}                 
+                    // Set random movement times
+                    Integer movementTimeTo = r.nextInt(200) + 1000;
+
+                    if (debugMode) {
+                        continue;
+                    }
                     useRightAndReturnOffsets(robot, startingPoint, offsets);
-                                                 
-                    // Click center tile of panel   
-                    int movementTimeTo = r.nextInt(200) + 1000;
-                    click(robot, "left", 255, 1000, 40, 20, movementTimeTo);
+
+                    // Press desired key from panel
+                    Integer waitTime = r.nextInt(200) + 1000;
+                    Thread.sleep(waitTime);
+                    switch (keyToPress) {
+                        case "space":
+                            robot.keyPress(KeyEvent.VK_6);
+                            robot.keyRelease(KeyEvent.VK_6);
+                            break;
+                        case "6":
+                            robot.keyPress(KeyEvent.VK_6);
+                            robot.keyRelease(KeyEvent.VK_6);
+                            break;
+                        default:
+                            System.out.println("Invalid key to press passed in");
+                    }
 
                     // Wait for completion
-                    int sleepTime = r.nextInt(1000) + 15000;
+                    Integer sleepTime = r.nextInt(1000) + timeToWait;
                     Thread.sleep(sleepTime);
 
                     // Right-click on banker
                     movementTimeTo = r.nextInt(200) + 1000;
-                    click(robot, "left", 790, 550, 0, 1, movementTimeTo);
- 
-                    // Left-click bank on banker
-                    //movementTimeTo = r.nextInt(200) + 500;
-                    //click(robot, "left", 913, 585, 0, 1, movementTimeTo);
-                    
+                    click(robot, "left", 880, 550, 0, 1, movementTimeTo);
+
                     // Deposit all items
                     movementTimeTo = r.nextInt(200) + 1000;
-                    click(robot, "left", 1000, 845, 10, 10, movementTimeTo);
+                    click(robot, "left", 1025, 845, 10, 10, movementTimeTo);
 
                     // Get first item
                     movementTimeTo = r.nextInt(200) + 1000;
-                    click(robot, "left", 790, 520, 10, 10, movementTimeTo);
+                    click(robot, "left", 835, 520, 10, 10, movementTimeTo);
 
                     // Get second item
                     movementTimeTo = r.nextInt(200) + 500;
-                    click(robot, "left", 835, 520, 5, 5, movementTimeTo);
-                    
+                    click(robot, "left", 870, 520, 5, 5, movementTimeTo);
+
                     // Exit bank menu
                     movementTimeTo = r.nextInt(200) + 500;
-                    click(robot, "left", 1043, 86, 5, 5, movementTimeTo);
-                    
+                    click(robot, "left", 1078, 99, 5, 5, movementTimeTo);
+
                     movementTimeTo = r.nextInt(200) + 1000;
                     Point currentPoint = AutoClicker.getCurrentPoint();
-                    mouseGlide(robot, (int) currentPoint.getX(), (int) currentPoint.getY(), (int) point.getX(), (int) point.getY(), movementTimeTo, 100); 
-               } catch (final InterruptedException ex) {
+                    mouseGlide(robot, (int) currentPoint.getX(), (int) currentPoint.getY(), (int) point.getX(),
+                            (int) point.getY(), movementTimeTo, 100);
+                } catch (final InterruptedException ex) {
                 }
             }
         } catch (final AWTException e) {
@@ -93,8 +114,8 @@ public class AutoClicker {
         return point;
     }
 
-    public static void mouseGlide(final Robot robot, final int x1, final int y1, final int x2, final int y2, final int t,
-            final int n) {
+    public static void mouseGlide(final Robot robot, final int x1, final int y1, final int x2, final int y2,
+            final int t, final int n) {
         try {
             final double dx = (x2 - x1) / ((double) n);
             final double dy = (y2 - y1) / ((double) n);
@@ -108,7 +129,8 @@ public class AutoClicker {
         }
     }
 
-    public static void click(final Robot robot, String type, int xCoord, int yCoord, int maxXCoord, int maxYCoord, int movementTime) {   
+    public static void click(final Robot robot, String type, int xCoord, int yCoord, int maxXCoord, int maxYCoord,
+            int movementTime) {
         final Random r = new Random();
         int xNewOffset = 0;
         int yNewOffset = 0;
@@ -180,7 +202,7 @@ public class AutoClicker {
         final int movementTimeBack = r.nextInt(200) + 100;
         AutoClicker.mouseGlide(robot, randomXCoord, randomYCoord, ReturnXCoord, ReturnYCoord, movementTimeBack, 50);
 
-        Integer[] returnOffsets = {xReturnOffset, yReturnOffset};
+        Integer[] returnOffsets = { xReturnOffset, yReturnOffset };
         return returnOffsets;
     }
 
