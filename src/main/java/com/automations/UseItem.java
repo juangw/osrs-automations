@@ -5,8 +5,19 @@ import java.awt.event.*;
 import java.util.Random;
 
 public class UseItem implements Automation {
+    int rate;
+    boolean debugMode;
+    String keyToPress;
+    int timeToWait;
 
-    public void run(int rate, boolean debugMode, String keyToPress, int timeToWait) {
+    public UseItem(int rate, boolean debugMode, String keyToPress, int timeToWait) {
+        this.rate = rate;
+        this.debugMode = debugMode;
+        this.keyToPress = keyToPress;
+        this.timeToWait = timeToWait;
+    }
+
+    public void run() {
         try {
             final Robot robot = new Robot();
             // Get starting location
@@ -15,7 +26,7 @@ public class UseItem implements Automation {
             Integer[] offsets = {0, 0};
             while (true) {
                 final Random r = new Random();
-                Integer sleep = r.nextInt(rate) + 200;
+                Integer sleep = r.nextInt(this.rate) + 200;
                 try {
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
@@ -26,10 +37,7 @@ public class UseItem implements Automation {
                 System.out.println(point.getX());
                 System.out.println(point.getY());
 
-                // Set random movement times
-                Integer movementTimeTo = r.nextInt(200) + 1000;
-
-                if (debugMode) {
+                if (this.debugMode) {
                     continue;
                 }
                 useRightAndReturnOffsets(robot, startingPoint, offsets);
@@ -41,7 +49,7 @@ public class UseItem implements Automation {
                 } catch (final InterruptedException ex) {
                     System.out.println("Script stopped");
                 }
-                switch (keyToPress) {
+                switch (this.keyToPress) {
                     case "space":
                         robot.keyPress(KeyEvent.VK_SPACE);
                         robot.keyRelease(KeyEvent.VK_SPACE);
@@ -55,12 +63,15 @@ public class UseItem implements Automation {
                 }
 
                 // Wait for completion
-                Integer sleepTime = r.nextInt(1000) + timeToWait;
+                Integer sleepTime = r.nextInt(1000) + this.timeToWait;
                 try {
                     Thread.sleep(sleepTime);
                 } catch (final InterruptedException ex) {
                     System.out.println("Script stopped");
                 }
+
+                // Set random movement times
+                Integer movementTimeTo;
 
                 // Right-click on banker
                 movementTimeTo = r.nextInt(200) + 1000;

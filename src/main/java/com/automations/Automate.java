@@ -24,7 +24,7 @@ public class Automate {
         debugMode = Boolean.parseBoolean(isDebug);
 
         // Get input on rate of repetition
-        while (rate == 0) {
+        while (rate == null) {
             try {
                 System.out.println("Speed of the auto-clicker (in miliseconds):");
                 final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -43,15 +43,28 @@ public class Automate {
         }
 
         // Run logic based on mode
+        Automate automate = new Automate();
+        Automation automation = automate.getAutomation(mode);
+        if (automation == null) {
+            System.out.println(String.format("Unsupported mode provided: %s", mode));
+        } else {
+            automation.run();
+        }
+    }
+
+    public Automation getAutomation(String mode){
+        if (mode == null){
+            return null;
+        }
         switch(mode) {
             case "useItems":
-                UseItem useItem = new UseItem();
-                useItem.run(rate, debugMode, keyToPress, timeToWait);
+                UseItem useItem = new UseItem(rate, debugMode, keyToPress, timeToWait);
+                return useItem;
             case "alch":
-                Alch alch = new Alch();
-                alch.run(rate, debugMode, keyToPress, timeToWait);
+                Alch alch = new Alch(rate, debugMode);
+                return alch;
             default:
-                System.out.println("Incorrect mode provided");
+                return null;
         }
     }
 }
