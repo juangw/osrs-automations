@@ -4,24 +4,24 @@ import java.io.*;
 
 public class Automate {
 
-    private static String mode = "";
-    private static Integer rate = 0;
-    private static String keyToPress = "";
-    private static Integer timeToWait = 0;
-    private static Boolean debugMode = false;
+    private static String mode;
+    private static Integer rate;
+    private static String keyToPress;
+    private static Integer timeToWait;
+    private static Boolean debugMode;
 
     public static void main(final String[] args) {
         // Used to determine automation method
-        mode = args[0];
+        mode = System.getenv("MODE");
 
         // Used only in useItem, can provide bogus values otherwise
-        keyToPress = args[1];
-        timeToWait = Integer.parseInt(args[2]);
+        keyToPress = System.getenv("USE_KEY_TO_PRESS");
+        String waitTime = System.getenv("USE_WAIT_TIME_SECONDS");
+        timeToWait = Integer.parseInt(waitTime);
 
         // Used to debug
-        if (args.length == 4) {
-            debugMode = Boolean.parseBoolean(args[4]);
-        }
+        String isDebug = System.getenv("DEBUG");
+        debugMode = Boolean.parseBoolean(isDebug);
 
         // Get input on rate of repetition
         while (rate == 0) {

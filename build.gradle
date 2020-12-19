@@ -9,5 +9,4 @@ repositories {
 
 sourceCompatibility = '1.7'
 
-dependencies {
-}
+dependencies {}
