@@ -9,12 +9,14 @@ public class UseItem implements Automation {
     boolean debugMode;
     String keyToPress;
     int timeToWait;
+    int itemCount;
 
-    public UseItem(int rate, boolean debugMode, String keyToPress, int timeToWait) {
+    public UseItem(int rate, boolean debugMode, String keyToPress, int timeToWait, int itemCount) {
         this.rate = rate;
         this.debugMode = debugMode;
         this.keyToPress = keyToPress;
         this.timeToWait = timeToWait;
+        this.itemCount = itemCount;
     }
 
     public void run() {
@@ -73,9 +75,9 @@ public class UseItem implements Automation {
                 // Set random movement times
                 Integer movementTimeTo;
 
-                // Right-click on banker
+                // left-click on banker
                 movementTimeTo = r.nextInt(200) + 1000;
-                click(robot, "left", 880, 550, 0, 1, movementTimeTo);
+                click(robot, "left", 903, 370, 0, 1, movementTimeTo);
 
                 // Deposit all items
                 movementTimeTo = r.nextInt(200) + 1000;
@@ -83,15 +85,21 @@ public class UseItem implements Automation {
 
                 // Get first item
                 movementTimeTo = r.nextInt(200) + 1000;
-                click(robot, "left", 835, 520, 10, 10, movementTimeTo);
+                click(robot, "left", 807, 520, 10, 10, movementTimeTo);
 
                 // Get second item
                 movementTimeTo = r.nextInt(200) + 500;
-                click(robot, "left", 870, 520, 5, 5, movementTimeTo);
+                click(robot, "left", 853, 520, 5, 5, movementTimeTo);
+
+                if (this.itemCount == 3) {
+                    // Get third item
+                    movementTimeTo = r.nextInt(200) + 500;
+                    click(robot, "left", 900, 520, 5, 5, movementTimeTo);
+                }
 
                 // Exit bank menu
                 movementTimeTo = r.nextInt(200) + 500;
-                click(robot, "left", 1078, 99, 5, 5, movementTimeTo);
+                click(robot, "left", 1060, 87, 5, 5, movementTimeTo);
 
                 movementTimeTo = r.nextInt(200) + 1000;
                 Point currentPoint = getCurrentPoint();

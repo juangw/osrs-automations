@@ -9,6 +9,7 @@ public class Automate {
     private static String keyToPress;
     private static Integer timeToWait;
     private static Boolean debugMode;
+    private static Integer itemCount;
 
     public static void main(final String[] args) {
         // Used to determine automation method
@@ -16,8 +17,8 @@ public class Automate {
 
         // Used only in useItem, can provide bogus values otherwise
         keyToPress = System.getenv("USE_KEY_TO_PRESS");
-        String waitTime = System.getenv("USE_WAIT_TIME_SECONDS");
-        timeToWait = Integer.parseInt(waitTime);
+        itemCount = Integer.parseInt(System.getenv("ITEM_COUNT"));
+        timeToWait = Integer.parseInt(System.getenv("USE_WAIT_TIME_SECONDS"));
 
         // Used to debug
         String isDebug = System.getenv("DEBUG");
@@ -58,7 +59,7 @@ public class Automate {
         }
         switch(mode) {
             case "useItems":
-                UseItem useItem = new UseItem(rate, debugMode, keyToPress, timeToWait);
+                UseItem useItem = new UseItem(rate, debugMode, keyToPress, timeToWait, itemCount);
                 return useItem;
             case "alch":
                 Alch alch = new Alch(rate, debugMode);
