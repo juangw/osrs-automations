@@ -27,13 +27,13 @@ public class Automate {
         // Get input on rate of repetition
         while (rate == null) {
             try {
-                System.out.println("Speed of the auto-clicker (in miliseconds):");
+                System.out.println("Iteration speed of the automation (in milliseconds):");
                 final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                 try {
                     rate = Integer.parseInt(in.readLine());
                     if (rate < 500) {
                         rate = 0;
-                        System.out.println("Must be at least 500 miliseconds.");
+                        System.out.println("Must be at least 500 milliseconds.");
                     }
                 } catch (final NumberFormatException ex) {
                     System.out.println("Error - please try again.");
@@ -64,6 +64,9 @@ public class Automate {
             case "alch":
                 Alch alch = new Alch(rate, debugMode);
                 return alch;
+            case "barbFish":
+                BarbFish barbFish = new BarbFish(rate, debugMode);
+                return barbFish;
             default:
                 return null;
         }
