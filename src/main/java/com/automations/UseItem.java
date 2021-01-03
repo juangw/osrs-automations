@@ -88,12 +88,12 @@ public class UseItem implements Automation {
                 click(robot, "left", 807, 520, 10, 10, movementTimeTo);
 
                 // Get second item
-                movementTimeTo = r.nextInt(200) + 500;
-                click(robot, "left", 853, 520, 5, 5, movementTimeTo);
+                movementTimeTo = r.nextInt(200) + 750;
+                click(robot, "left", 854, 520, 5, 5, movementTimeTo);
 
                 if (this.itemCount == 3) {
                     // Get third item
-                    movementTimeTo = r.nextInt(200) + 500;
+                    movementTimeTo = r.nextInt(200) + 750;
                     click(robot, "left", 900, 520, 5, 5, movementTimeTo);
                 }
 
@@ -157,6 +157,11 @@ public class UseItem implements Automation {
         if (type.equals("left")) {
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            try {
+                Thread.sleep(100);
+            } catch (final InterruptedException e) {
+                System.out.println(e.toString());
+            }
         } else if (type.equals("right")) {
             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
