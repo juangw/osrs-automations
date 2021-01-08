@@ -67,6 +67,9 @@ public class Automate {
             case "barbFish":
                 BarbFish barbFish = new BarbFish(rate, debugMode);
                 return barbFish;
+            case "cleanHerb":
+                CleanHerb cleanHerb = new CleanHerb(rate, debugMode);
+                return cleanHerb;
             default:
                 return null;
         }

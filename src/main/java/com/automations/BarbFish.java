@@ -20,7 +20,6 @@ public class BarbFish implements Automation {
             final Point startingPoint = getCurrentPoint();
             while (true) {
                 final Random r = new Random();
-                Integer sleep = r.nextInt(this.rate) + 500;
 
                 // Run logic to click on fishing spot
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -34,7 +33,7 @@ public class BarbFish implements Automation {
 
                 // Sleep while filling up inventory
                 try {
-                    Thread.sleep(sleep);
+                    Thread.sleep(this.rate);
                 } catch (final InterruptedException ex) {
                     System.out.println("Script stopped");
                 }
