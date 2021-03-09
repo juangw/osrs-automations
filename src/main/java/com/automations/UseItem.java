@@ -1,7 +1,8 @@
 package com.automations;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class UseItem implements Automation {
@@ -23,29 +24,29 @@ public class UseItem implements Automation {
         try {
             final Robot robot = new Robot();
             // Get starting location
-            final Point startingPoint = getCurrentPoint();
+            final Point startingPoint = Automation.getCurrentPoint();
 
-            Integer[] offsets = {0, 0};
+            int[] offsets = {0, 0};
             while (true) {
                 final Random r = new Random();
-                Integer sleep = r.nextInt(this.rate) + 200;
+                int sleep = r.nextInt(this.rate) + 200;
                 try {
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
                     System.out.println("Script stopped");
                 }
 
-                Point point = getCurrentPoint();
+                Point point = Automation.getCurrentPoint();
                 System.out.println(point.getX());
                 System.out.println(point.getY());
 
                 if (this.debugMode) {
                     continue;
                 }
-                useRightAndReturnOffsets(robot, startingPoint, offsets);
+                useRight(robot, startingPoint, offsets);
 
                 // Press desired key from panel
-                Integer waitTime = r.nextInt(200) + 1000;
+                int waitTime = r.nextInt(200) + 1000;
                 try {
                     Thread.sleep(waitTime);
                 } catch (final InterruptedException ex) {
@@ -65,7 +66,7 @@ public class UseItem implements Automation {
                 }
 
                 // Wait for completion
-                Integer sleepTime = r.nextInt(1000) + this.timeToWait;
+                int sleepTime = r.nextInt(1000) + this.timeToWait;
                 try {
                     Thread.sleep(sleepTime);
                 } catch (final InterruptedException ex) {
@@ -73,7 +74,7 @@ public class UseItem implements Automation {
                 }
 
                 // Set random movement times
-                Integer movementTimeTo;
+                int movementTimeTo;
 
                 // left-click on banker
                 movementTimeTo = r.nextInt(200) + 1000;
@@ -102,33 +103,12 @@ public class UseItem implements Automation {
                 click(robot, "left", 1060, 87, 5, 5, movementTimeTo);
 
                 movementTimeTo = r.nextInt(200) + 1000;
-                Point currentPoint = getCurrentPoint();
-                mouseGlide(robot, (int) currentPoint.getX(), (int) currentPoint.getY(), (int) point.getX(),
+                Point currentPoint = Automation.getCurrentPoint();
+                Automation.mouseGlide(robot, (int) currentPoint.getX(), (int) currentPoint.getY(), (int) point.getX(),
                         (int) point.getY(), movementTimeTo, 100);
             }
         } catch (final AWTException e) {
             System.out.println(e.toString());
-        }
-    }
-
-    public static Point getCurrentPoint() {
-        final PointerInfo pointer = MouseInfo.getPointerInfo();
-        final Point point = pointer.getLocation();
-        return point;
-    }
-
-    public static void mouseGlide(Robot robot, int x1, int y1, int x2, int y2,
-                                  final int t, final int n) {
-        try {
-            final double dx = (x2 - x1) / ((double) n);
-            final double dy = (y2 - y1) / ((double) n);
-            final double dt = t / ((double) n);
-            for (int step = 1; step <= n; step++) {
-                Thread.sleep((int) dt);
-                robot.mouseMove((int) (x1 + dx * step), (int) (y1 + dy * step));
-            }
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
@@ -149,10 +129,10 @@ public class UseItem implements Automation {
         // Move pixels up or down with random maxYCoord
         final int randomYCoord = yCoord + yNewOffset;
 
-        Point startPoint = getCurrentPoint();
+        Point startPoint = Automation.getCurrentPoint();
         int startXCoord = (int) startPoint.getX();
         int startYCoord = (int) startPoint.getY();
-        mouseGlide(robot, startXCoord, startYCoord, randomXCoord, randomYCoord, movementTime, 100);
+        Automation.mouseGlide(robot, startXCoord, startYCoord, randomXCoord, randomYCoord, movementTime, 100);
 
         if (type.equals("left")) {
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -168,18 +148,18 @@ public class UseItem implements Automation {
         }
     }
 
-    public static Integer[] useRightAndReturnOffsets(Robot robot, Point startingPoint, Integer[] offsets) {
+    public static void useRight(Robot robot, Point startingPoint, int[] offsets) {
         final Random r = new Random();
         // Use initial item by right clicking
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        int startingXCoord = 0;
-        int startingYCoord = 0;
+        int startingXCoord;
+        int startingYCoord;
         if (offsets[0] == 0 && offsets[1] == 0) {
             startingXCoord = (int) startingPoint.getX();
             startingYCoord = (int) startingPoint.getY();
         } else {
-            Point currentPoint = getCurrentPoint();
+            Point currentPoint = Automation.getCurrentPoint();
             startingXCoord = (int) currentPoint.getX() - offsets[0];
             startingYCoord = (int) currentPoint.getY() - offsets[1];
         }
@@ -194,7 +174,7 @@ public class UseItem implements Automation {
 
         // Move the cursor to new location
         final int movementTimeTo = r.nextInt(200) + 100;
-        mouseGlide(robot, startingXCoord, startingYCoord, randomXCoord, randomYCoord, movementTimeTo, 50);
+        Automation.mouseGlide(robot, startingXCoord, startingYCoord, randomXCoord, randomYCoord, movementTimeTo, 50);
 
         // Use on second item by right clicking
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -208,9 +188,6 @@ public class UseItem implements Automation {
         final int ReturnXCoord = startingXCoord + xReturnOffset;
         final int ReturnYCoord = startingYCoord + yReturnOffset;
         final int movementTimeBack = r.nextInt(200) + 100;
-        mouseGlide(robot, randomXCoord, randomYCoord, ReturnXCoord, ReturnYCoord, movementTimeBack, 50);
-
-        Integer[] returnOffsets = { xReturnOffset, yReturnOffset };
-        return returnOffsets;
+        Automation.mouseGlide(robot, randomXCoord, randomYCoord, ReturnXCoord, ReturnYCoord, movementTimeBack, 50);
     }
 }

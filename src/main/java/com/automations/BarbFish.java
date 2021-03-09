@@ -17,11 +17,16 @@ public class BarbFish implements Automation {
     public void run() {
         try {
             final Robot robot = new Robot();
-            final Point startingPoint = getCurrentPoint();
+            final Point startingPoint = Automation.getCurrentPoint();
             while (true) {
                 final Random r = new Random();
 
                 // Run logic to click on fishing spot
+                robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+                robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+                final Point checkPointOne = Automation.getCurrentPoint();
+                int movementTimeDown = r.nextInt(200) + 1000;
+                Automation.mouseGlide(robot, (int) checkPointOne.getX(), (int) checkPointOne.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 // Wait for key press to register
                 try {
@@ -31,18 +36,25 @@ public class BarbFish implements Automation {
                 }
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
+                final Point checkPointTwo = Automation.getCurrentPoint();
+                Automation.mouseGlide(robot, (int) checkPointTwo.getX(), (int) checkPointTwo.getY(), (int) checkPointOne.getX(), (int) checkPointOne.getY(), movementTimeDown, 200);
+                robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+                robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+                Automation.mouseGlide(robot, (int) checkPointOne.getX(), (int) checkPointOne.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
                 // Sleep while filling up inventory
                 try {
                     Thread.sleep(this.rate);
                 } catch (final InterruptedException ex) {
                     System.out.println("Script stopped");
                 }
+                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
                 if (this.debugMode) {
                     // Get current location
-                    final Point currentPoint = getCurrentPoint();
-                    System.out.println(currentPoint.getX());
-                    System.out.println(currentPoint.getY());
+                    final Point checkPointThree = Automation.getCurrentPoint();
+                    System.out.println(checkPointThree.getX());
+                    System.out.println(checkPointThree.getY());
                     System.out.println("running in debug mode");
                     continue;
                 }
@@ -51,27 +63,21 @@ public class BarbFish implements Automation {
                 dropInventory(robot);
 
                 // Reset mouse position
-                final Point currentPoint = getCurrentPoint();
-                Integer movementTimeTo = r.nextInt(200) + 500;
-                mouseGlide(robot, (int) currentPoint.getX(), (int) currentPoint.getY(), (int) startingPoint.getX(), (int) startingPoint.getY(), movementTimeTo, 200);
+                final Point checkPointFour = Automation.getCurrentPoint();
+                int movementTimeTo = r.nextInt(200) + 500;
+                Automation.mouseGlide(robot, (int) checkPointFour.getX(), (int) checkPointFour.getY(), (int) startingPoint.getX(), (int) startingPoint.getY(), movementTimeTo, 200);
             }
         } catch (final AWTException e) {
             System.out.println(e.toString());
         }
     }
 
-    private static Point getCurrentPoint() {
-        final PointerInfo pointer = MouseInfo.getPointerInfo();
-        final Point point = pointer.getLocation();
-        return point;
-    }
-
     private static void dropInventory(Robot robot) {
         final Random r = new Random();
-        Point startingPoint = getCurrentPoint();
-        Integer movementTimeTo = r.nextInt(100) + 100;
+        Point startingPoint = Automation.getCurrentPoint();
+        int movementTimeTo = r.nextInt(100) + 100;
         // Move mouse to first inventory tile
-        mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
+        Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
         robot.keyPress(KeyEvent.VK_SHIFT);
         // Wait for key press to register
         try {
@@ -81,9 +87,9 @@ public class BarbFish implements Automation {
         }
 
         // Drop items for all rows
-        Point currentPoint = getCurrentPoint();
-        Integer verticalPoint = (int) currentPoint.getY();
-        Integer originalXPoint = (int) currentPoint.getX();
+        Point currentPoint = Automation.getCurrentPoint();
+        int verticalPoint = (int) currentPoint.getY();
+        int originalXPoint = (int) currentPoint.getX();
         for (int y = 0; y <= 5; y++) {
 
             // Drop items in row
@@ -96,37 +102,22 @@ public class BarbFish implements Automation {
                     System.out.println("Script stopped");
                 }
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-                Point xPoint = getCurrentPoint();
-                Integer newXPoint = (int) xPoint.getX() + 40;
+                Point xPoint = Automation.getCurrentPoint();
+                int newXPoint = (int) xPoint.getX() + 40;
 
                 if (x != 3) {
-                    mouseGlide(robot, (int) xPoint.getX(), (int) xPoint.getY(), newXPoint, verticalPoint, movementTimeTo, 100);
+                    Automation.mouseGlide(robot, (int) xPoint.getX(), (int) xPoint.getY(), newXPoint, verticalPoint, movementTimeTo, 100);
                 }
             }
 
             // Go to next row and reset horizontal movement
             verticalPoint += 38;
-            Point yPoint = getCurrentPoint();
+            Point yPoint = Automation.getCurrentPoint();
             if (y != 5) {
-                mouseGlide(robot, (int) yPoint.getX(), (int) yPoint.getY(), originalXPoint, verticalPoint, movementTimeTo, 100);
+                Automation.mouseGlide(robot, (int) yPoint.getX(), (int) yPoint.getY(), originalXPoint, verticalPoint, movementTimeTo, 100);
             }
         }
 
         robot.keyRelease(KeyEvent.VK_SHIFT);
-    }
-
-    private static void mouseGlide(Robot robot, int x1, int y1, int x2, int y2,
-                                  final int t, final int n) {
-        try {
-            final double dx = (x2 - x1) / ((double) n);
-            final double dy = (y2 - y1) / ((double) n);
-            final double dt = t / ((double) n);
-            for (int step = 1; step <= n; step++) {
-                Thread.sleep((int) dt);
-                robot.mouseMove((int) (x1 + dx * step), (int) (y1 + dy * step));
-            }
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

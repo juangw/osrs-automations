@@ -1,6 +1,8 @@
 package com.automations;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Automate {
 
@@ -59,17 +61,15 @@ public class Automate {
         }
         switch(mode) {
             case "useItems":
-                UseItem useItem = new UseItem(rate, debugMode, keyToPress, timeToWait, itemCount);
-                return useItem;
+                return new UseItem(rate, debugMode, keyToPress, timeToWait, itemCount);
             case "alch":
-                Alch alch = new Alch(rate, debugMode);
-                return alch;
+                return new Alch(rate, debugMode);
             case "barbFish":
-                BarbFish barbFish = new BarbFish(rate, debugMode);
-                return barbFish;
+                return new BarbFish(rate, debugMode);
             case "cleanHerb":
-                CleanHerb cleanHerb = new CleanHerb(rate, debugMode);
-                return cleanHerb;
+                return new CleanHerb(rate, debugMode);
+            case "thieve":
+                return new Thieve(rate, debugMode);
             default:
                 return null;
         }
