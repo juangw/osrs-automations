@@ -5,13 +5,15 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
-public class BarbFish implements Automation {
+public class Fish implements Automation {
     int rate;
     boolean debugMode;
+    String action;
 
-    public BarbFish(int rate, boolean debugMode) {
+    public Fish(int rate, boolean debugMode, String action) {
         this.rate = rate;
         this.debugMode = debugMode;
+        this.action = action;
     }
 
     public void run() {
@@ -21,12 +23,20 @@ public class BarbFish implements Automation {
             while (true) {
                 final Random r = new Random();
 
-                // Run logic to click on fishing spot
+                // Run logic to right click on fishing spot
                 robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
                 final Point checkPointOne = Automation.getCurrentPoint();
                 int movementTimeDown = r.nextInt(200) + 1000;
                 Automation.mouseGlide(robot, (int) checkPointOne.getX(), (int) checkPointOne.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
+
+                // Sleep while doing action
+                try {
+                    Thread.sleep(5000);
+                } catch (final InterruptedException ex) {
+                    System.out.println("Script stopped");
+                }
+
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 // Wait for key press to register
                 try {
@@ -59,17 +69,71 @@ public class BarbFish implements Automation {
                     continue;
                 }
 
-                // Drop everything in inventory not in first row
-                dropInventory(robot);
+                // Sleep while running to next spot
+                try {
+                    Thread.sleep(3500);
+                } catch (final InterruptedException ex) {
+                    System.out.println("Script stopped");
+                }
 
-                // Reset mouse position
+                // Drop everything in inventory not in first row
+                switch(action) {
+                    case "drop":
+                        dropInventory(robot);
+                        break;
+                    case "use":
+                        useItem(robot);
+                        break;
+                    default:
+                        throw new Exception(String.format("Invalid action provided: %s", action));
+                }
+
                 final Point checkPointFour = Automation.getCurrentPoint();
-                int movementTimeTo = r.nextInt(200) + 500;
-                Automation.mouseGlide(robot, (int) checkPointFour.getX(), (int) checkPointFour.getY(), (int) startingPoint.getX(), (int) startingPoint.getY(), movementTimeTo, 200);
+                Automation.mouseGlide(robot, (int) checkPointFour.getX(), (int) checkPointFour.getY(), (int) checkPointOne.getX(), (int) checkPointOne.getY(), movementTimeDown, 200);
+
+                // Sleep while running to next spot
+                try {
+                    Thread.sleep(3500);
+                } catch (final InterruptedException ex) {
+                    System.out.println("Script stopped");
+                }
             }
         } catch (final AWTException e) {
             System.out.println(e.toString());
+        }  catch (final Exception e) {
+            System.out.println(e.toString());
         }
+    }
+
+    private void useItem(Robot robot) {
+        final Random r = new Random();
+        Point startingPoint = Automation.getCurrentPoint();
+        int movementTimeTo = r.nextInt(100) + 500;
+        // Move mouse to first inventory tile
+        Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
+        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        // Wait for click to register
+        try {
+            Thread.sleep(200);
+        } catch (final InterruptedException ex) {
+            System.out.println("Script stopped");
+        }
+        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+        // Move mouse to second inventory tile
+        Point firstInventoryPoint = Automation.getCurrentPoint();
+        Point secondInventoryPoint = firstInventoryPoint;
+        secondInventoryPoint.x = secondInventoryPoint.x + 40;
+        Automation.mouseGlide(robot, (int) firstInventoryPoint.getX(), (int) firstInventoryPoint.getY(), (int) secondInventoryPoint.getX(), (int) secondInventoryPoint.getY(), movementTimeTo, 100);
+
+        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        // Wait for click to register
+        try {
+            Thread.sleep(200);
+        } catch (final InterruptedException ex) {
+            System.out.println("Script stopped");
+        }
+        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     private static void dropInventory(Robot robot) {

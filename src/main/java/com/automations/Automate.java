@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 public class Automate {
 
     private static String mode;
+    private static String action;
     private static Integer rate;
     private static String keyToPress;
     private static Integer timeToWait;
@@ -14,8 +15,9 @@ public class Automate {
     private static Integer itemCount;
 
     public static void main(final String[] args) {
-        // Used to determine automation method
+        // Used to determine automation method/action
         mode = System.getenv("MODE");
+        action = System.getenv("ACTION");
 
         // Used only in useItem, can provide bogus values otherwise
         keyToPress = System.getenv("USE_KEY_TO_PRESS");
@@ -64,8 +66,8 @@ public class Automate {
                 return new UseItem(rate, debugMode, keyToPress, timeToWait, itemCount);
             case "alch":
                 return new Alch(rate, debugMode);
-            case "barbFish":
-                return new BarbFish(rate, debugMode);
+            case "fish":
+                return new Fish(rate, debugMode, action);
             case "cleanHerb":
                 return new CleanHerb(rate, debugMode);
             case "thieve":
