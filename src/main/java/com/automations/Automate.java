@@ -72,6 +72,8 @@ public class Automate {
                 return new CleanHerb(rate, debugMode);
             case "thieve":
                 return new Thieve(rate, debugMode);
+            case "mine":
+                return new Mine(rate, debugMode);
             default:
                 return null;
         }
