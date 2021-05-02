@@ -3,8 +3,11 @@ package com.automations;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class CleanHerb implements Automation {
+    private final static Logger LOGGER = Logger.getLogger(CleanHerb.class.getName());
+
     int rate;
     boolean debugMode;
 
@@ -22,12 +25,12 @@ public class CleanHerb implements Automation {
                 try {
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
 
                 Point point = Automation.getCurrentPoint();
-                System.out.println(point.getX());
-                System.out.println(point.getY());
+                LOGGER.info(String.valueOf(point.getX()));
+                LOGGER.info(String.valueOf(point.getY()));
 
                 if (this.debugMode) {
                     continue;
@@ -60,7 +63,7 @@ public class CleanHerb implements Automation {
                         (int) point.getY(), movementTimeTo, 100);
             }
         } catch (final AWTException e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }
     }
 
@@ -85,7 +88,7 @@ public class CleanHerb implements Automation {
                 try {
                     Thread.sleep(200);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                 Point xPoint = Automation.getCurrentPoint();
@@ -133,7 +136,7 @@ public class CleanHerb implements Automation {
             try {
                 Thread.sleep(100);
             } catch (final InterruptedException e) {
-                System.out.println(e.toString());
+                LOGGER.info(e.toString());
             }
         } else if (type.equals("right")) {
             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);

@@ -3,8 +3,10 @@ package com.automations;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 public class Automate {
+    private final static Logger LOGGER = Logger.getLogger(Automate.class.getName());
 
     private static String mode;
     private static String action;
@@ -31,19 +33,19 @@ public class Automate {
         // Get input on rate of repetition
         while (rate == null) {
             try {
-                System.out.println("Iteration speed of the automation (in milliseconds):");
+                LOGGER.info("Iteration speed of the automation (in milliseconds):");
                 final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                 try {
                     rate = Integer.parseInt(in.readLine());
                     if (rate < 500) {
                         rate = 0;
-                        System.out.println("Must be at least 500 milliseconds.");
+                        LOGGER.info("Must be at least 500 milliseconds.");
                     }
                 } catch (final NumberFormatException ex) {
-                    System.out.println("Error - please try again.");
+                    LOGGER.info("Error - please try again.");
                 }
             } catch (final IOException e) {
-                System.out.println(e.toString());
+                LOGGER.info(e.toString());
             }
         }
 
@@ -51,7 +53,7 @@ public class Automate {
         Automate automate = new Automate();
         Automation automation = automate.getAutomation(mode);
         if (automation == null) {
-            System.out.println(String.format("Unsupported mode provided: %s", mode));
+            LOGGER.info(String.format("Unsupported mode provided: %s", mode));
         } else {
             automation.run();
         }

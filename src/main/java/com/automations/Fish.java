@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Fish implements Automation {
+    private final static Logger LOGGER = Logger.getLogger(Fish.class.getName());
+
     int rate;
     boolean debugMode;
     String action;
@@ -22,19 +25,18 @@ public class Fish implements Automation {
             final Point startingPoint = Automation.getCurrentPoint();
             while (true) {
                 final Random r = new Random();
+                int movementTimeDown = r.nextInt(200) + 1000;
 
                 // Run logic to right click on fishing spot
                 robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-                final Point checkPointOne = Automation.getCurrentPoint();
-                int movementTimeDown = r.nextInt(200) + 1000;
-                Automation.mouseGlide(robot, (int) checkPointOne.getX(), (int) checkPointOne.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
-
+                Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
+                Point firstMenuOption = Automation.getCurrentPoint();
                 // Sleep while doing action
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
 
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -42,38 +44,37 @@ public class Fish implements Automation {
                 try {
                     Thread.sleep(500);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
-                final Point checkPointTwo = Automation.getCurrentPoint();
-                Automation.mouseGlide(robot, (int) checkPointTwo.getX(), (int) checkPointTwo.getY(), (int) checkPointOne.getX(), (int) checkPointOne.getY(), movementTimeDown, 200);
+                Automation.mouseGlide(robot, (int) firstMenuOption.getX(), (int) firstMenuOption.getY(), (int) startingPoint.getX(), (int) startingPoint.getY(), movementTimeDown, 200);
                 robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-                Automation.mouseGlide(robot, (int) checkPointOne.getX(), (int) checkPointOne.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
+                Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), (int) firstMenuOption.getX(), (int) firstMenuOption.getY(), movementTimeDown, 200);
                 // Sleep while filling up inventory
                 try {
                     Thread.sleep(this.rate);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
                 if (this.debugMode) {
                     // Get current location
-                    final Point checkPointThree = Automation.getCurrentPoint();
-                    System.out.println(checkPointThree.getX());
-                    System.out.println(checkPointThree.getY());
-                    System.out.println("running in debug mode");
+                    final Point debugPoint = Automation.getCurrentPoint();
+                    LOGGER.info(String.valueOf(debugPoint.getX()));
+                    LOGGER.info(String.valueOf(debugPoint.getY()));
+                    LOGGER.info("running in debug mode");
                     continue;
                 }
 
                 // Sleep while running to next spot
                 try {
-                    Thread.sleep(3500);
+                    Thread.sleep(3000);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
 
                 // Drop everything in inventory not in first row
@@ -88,20 +89,13 @@ public class Fish implements Automation {
                         throw new Exception(String.format("Invalid action provided: %s", action));
                 }
 
-                final Point checkPointFour = Automation.getCurrentPoint();
-                Automation.mouseGlide(robot, (int) checkPointFour.getX(), (int) checkPointFour.getY(), (int) checkPointOne.getX(), (int) checkPointOne.getY(), movementTimeDown, 200);
-
-                // Sleep while running to next spot
-                try {
-                    Thread.sleep(3500);
-                } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
-                }
+                final Point afterAction = Automation.getCurrentPoint();
+                Automation.mouseGlide(robot, (int) afterAction.getX(), (int) afterAction.getY(), (int) startingPoint.getX(), (int) startingPoint.getY(), movementTimeDown, 200);
             }
         } catch (final AWTException e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }  catch (final Exception e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }
     }
 
@@ -116,7 +110,7 @@ public class Fish implements Automation {
         try {
             Thread.sleep(200);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
@@ -131,7 +125,7 @@ public class Fish implements Automation {
         try {
             Thread.sleep(200);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
@@ -147,7 +141,7 @@ public class Fish implements Automation {
         try {
             Thread.sleep(500);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
 
         // Drop items for all rows
@@ -163,7 +157,7 @@ public class Fish implements Automation {
                 try {
                     Thread.sleep(200);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                 Point xPoint = Automation.getCurrentPoint();

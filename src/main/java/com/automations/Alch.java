@@ -3,8 +3,11 @@ package com.automations;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Alch implements Automation {
+    private final static Logger LOGGER = Logger.getLogger(Alch.class.getName());
+
     int rate;
     boolean debugMode;
 
@@ -20,18 +23,18 @@ public class Alch implements Automation {
                 final Random r = new Random();
                 Integer sleep = r.nextInt(this.rate) + 500;
                 if (this.debugMode) {
-                    System.out.println("running in debug mode");
+                    LOGGER.info("running in debug mode");
                 }
                 try {
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
             }
         } catch (final AWTException e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }
     }
 }

@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Mine implements Automation {
+    private final static Logger LOGGER = Logger.getLogger(Mine.class.getName());
+
     int rate;
     boolean debugMode;
 
@@ -23,15 +26,15 @@ public class Mine implements Automation {
                 if (this.debugMode) {
                     // Get current location
                     final Point debugCheckpoint = Automation.getCurrentPoint();
-                    System.out.println(debugCheckpoint.getX());
-                    System.out.println(debugCheckpoint.getY());
-                    System.out.println("running in debug mode");
+                    LOGGER.info(String.valueOf(debugCheckpoint.getX()));
+                    LOGGER.info(String.valueOf(debugCheckpoint.getY()));
+                    LOGGER.info("running in debug mode");
 
                     try {
                         int sleep = r.nextInt(200) + 3000;
                         Thread.sleep(sleep);
                     } catch (final InterruptedException ex) {
-                        System.out.println("Script stopped");
+                        LOGGER.info("Script stopped");
                     }
                     continue;
                 }
@@ -42,7 +45,7 @@ public class Mine implements Automation {
                     try {
                         Thread.sleep(1500);
                     } catch (final InterruptedException ex) {
-                        System.out.println("Script stopped");
+                        LOGGER.info("Script stopped");
                     }
                 }
 
@@ -54,11 +57,11 @@ public class Mine implements Automation {
                     int sleep = r.nextInt(200) + this.rate;
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
             }
         } catch (final AWTException e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }
     }
 
@@ -71,14 +74,14 @@ public class Mine implements Automation {
         try {
             Thread.sleep(200);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
         try {
             Thread.sleep(1500);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
 
         Automation.mouseGlide(robot, 980, 430, 1230, 630, movementTimeTo, 100);
@@ -87,14 +90,14 @@ public class Mine implements Automation {
         try {
             Thread.sleep(200);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
         try {
             Thread.sleep(1500);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
 
         Automation.mouseGlide(robot, 1230, 630, 975, 895, movementTimeTo, 100);
@@ -103,14 +106,14 @@ public class Mine implements Automation {
         try {
             Thread.sleep(200);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
         try {
             Thread.sleep(1500);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
     }
 
@@ -124,7 +127,7 @@ public class Mine implements Automation {
         try {
             Thread.sleep(500);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
 
         // Drop items for all rows
@@ -140,7 +143,7 @@ public class Mine implements Automation {
                 try {
                     Thread.sleep(200);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                 Point xPoint = Automation.getCurrentPoint();

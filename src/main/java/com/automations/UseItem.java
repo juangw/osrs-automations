@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class UseItem implements Automation {
+    private final static Logger LOGGER = Logger.getLogger(UseItem.class.getName());
+
     int rate;
     boolean debugMode;
     String keyToPress;
@@ -33,12 +36,12 @@ public class UseItem implements Automation {
                 try {
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
 
                 Point point = Automation.getCurrentPoint();
-                System.out.println(point.getX());
-                System.out.println(point.getY());
+                LOGGER.info(String.valueOf(point.getX()));
+                LOGGER.info(String.valueOf(point.getY()));
 
                 if (this.debugMode) {
                     continue;
@@ -50,7 +53,7 @@ public class UseItem implements Automation {
                 try {
                     Thread.sleep(waitTime);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
                 switch (this.keyToPress) {
                     case "space":
@@ -62,7 +65,7 @@ public class UseItem implements Automation {
                         robot.keyRelease(KeyEvent.VK_6);
                         break;
                     default:
-                        System.out.println("Invalid key to press passed in");
+                        LOGGER.info("Invalid key to press passed in");
                 }
 
                 // Wait for completion
@@ -70,7 +73,7 @@ public class UseItem implements Automation {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
 
                 // Set random movement times
@@ -108,7 +111,7 @@ public class UseItem implements Automation {
                         (int) point.getY(), movementTimeTo, 100);
             }
         } catch (final AWTException e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }
     }
 
@@ -140,7 +143,7 @@ public class UseItem implements Automation {
             try {
                 Thread.sleep(100);
             } catch (final InterruptedException e) {
-                System.out.println(e.toString());
+                LOGGER.info(e.toString());
             }
         } else if (type.equals("right")) {
             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);

@@ -3,8 +3,11 @@ package com.automations;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Thieve implements Automation {
+    private final static Logger LOGGER = Logger.getLogger(Thieve.class.getName());
+
     int rate;
     boolean debugMode;
 
@@ -26,9 +29,9 @@ public class Thieve implements Automation {
                 if (this.debugMode) {
                     // Get current location
                     final Point checkPointThree = Automation.getCurrentPoint();
-                    System.out.println(checkPointThree.getX());
-                    System.out.println(checkPointThree.getY());
-                    System.out.println("running in debug mode");
+                    LOGGER.info(String.valueOf(checkPointThree.getX()));
+                    LOGGER.info(String.valueOf(checkPointThree.getY()));
+                    LOGGER.info("running in debug mode");
                     continue;
                 }
 
@@ -40,7 +43,7 @@ public class Thieve implements Automation {
                     int sleep = r.nextInt(200) + this.rate;
                     Thread.sleep(sleep);
                 } catch (final InterruptedException ex) {
-                    System.out.println("Script stopped");
+                    LOGGER.info("Script stopped");
                 }
 
                 // Reset mouse position
@@ -57,7 +60,7 @@ public class Thieve implements Automation {
                 );
             }
         } catch (final AWTException e) {
-            System.out.println(e.toString());
+            LOGGER.info(e.toString());
         }
     }
 
@@ -70,13 +73,13 @@ public class Thieve implements Automation {
             try {
                 Thread.sleep(500);
             } catch (final InterruptedException ex) {
-                System.out.println("Script stopped");
+                LOGGER.info("Script stopped");
             }
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
             try {
                 Thread.sleep(r.nextInt(200) + 200);
             } catch (final InterruptedException ex) {
-                System.out.println("Script stopped");
+                LOGGER.info("Script stopped");
             }
         }
     }
@@ -91,7 +94,7 @@ public class Thieve implements Automation {
         try {
             Thread.sleep(500);
         } catch (final InterruptedException ex) {
-            System.out.println("Script stopped");
+            LOGGER.info("Script stopped");
         }
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
