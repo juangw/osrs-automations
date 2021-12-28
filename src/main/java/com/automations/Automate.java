@@ -33,19 +33,17 @@ public class Automate {
         // Get input on rate of repetition
         while (rate == null) {
             try {
-                LOGGER.info("Iteration speed of the automation (in milliseconds):");
-                final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-                try {
-                    rate = Integer.parseInt(in.readLine());
-                    if (rate < 500) {
-                        rate = 0;
-                        LOGGER.info("Must be at least 500 milliseconds.");
-                    }
-                } catch (final NumberFormatException ex) {
-                    LOGGER.info("Error - please try again.");
+            LOGGER.info("Iteration speed of the automation (in milliseconds):");
+            final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                rate = Integer.parseInt(in.readLine());
+                if (rate < 500) {
+                    rate = 0;
+                    LOGGER.info("Must be at least 500 milliseconds.");
                 }
             } catch (final IOException e) {
                 LOGGER.info(e.toString());
+            } catch (final NumberFormatException ex) {
+                LOGGER.info("Error - please try again.");
             }
         }
 

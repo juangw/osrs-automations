@@ -39,12 +39,8 @@ public class Thieve implements Automation {
                 lootPouches(robot, r);
 
                 // Sleep for given rate
-                try {
-                    int sleep = r.nextInt(200) + this.rate;
-                    Thread.sleep(sleep);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                int sleep = r.nextInt(200) + this.rate;
+                Thread.sleep(sleep);
 
                 // Reset mouse position
                 final Point checkPointFour = Automation.getCurrentPoint();
@@ -61,41 +57,31 @@ public class Thieve implements Automation {
             }
         } catch (final AWTException e) {
             LOGGER.info(e.toString());
+        } catch (final InterruptedException ex) {
+            LOGGER.info("Script stopped");
         }
     }
 
-    private static void clickNPC(Robot robot, Random r) {
+    private static void clickNPC(Robot robot, Random r) throws InterruptedException {
         long currentTime = System.currentTimeMillis();
         long end = currentTime + 30000 + r.nextInt(500);
         while (System.currentTimeMillis() < end) {
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             // Wait for key press to register
-            try {
-                Thread.sleep(500);
-            } catch (final InterruptedException ex) {
-                LOGGER.info("Script stopped");
-            }
+            Thread.sleep(500);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-            try {
-                Thread.sleep(r.nextInt(200) + 200);
-            } catch (final InterruptedException ex) {
-                LOGGER.info("Script stopped");
-            }
+            Thread.sleep(r.nextInt(200) + 200);
         }
     }
 
-    private static void lootPouches(Robot robot, Random r) {
+    private static void lootPouches(Robot robot, Random r) throws InterruptedException {
         Point startingPoint = Automation.getCurrentPoint();
         int movementTimeTo = r.nextInt(100) + 100;
         // Move mouse to first inventory tile
         Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         // Wait for key press to register
-        try {
-            Thread.sleep(500);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(500);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 }

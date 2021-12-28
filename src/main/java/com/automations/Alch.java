@@ -25,16 +25,14 @@ public class Alch implements Automation {
                 if (this.debugMode) {
                     LOGGER.info("running in debug mode");
                 }
-                try {
-                    Thread.sleep(sleep);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(sleep);
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
             }
         } catch (final AWTException e) {
             LOGGER.info(e.toString());
+        } catch (final InterruptedException ex) {
+            LOGGER.info("Script stopped");
         }
     }
 }

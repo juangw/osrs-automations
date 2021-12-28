@@ -33,11 +33,7 @@ public class UseItem implements Automation {
             while (true) {
                 final Random r = new Random();
                 int sleep = r.nextInt(this.rate) + 200;
-                try {
-                    Thread.sleep(sleep);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(sleep);
 
                 Point point = Automation.getCurrentPoint();
                 LOGGER.info(String.valueOf(point.getX()));
@@ -50,11 +46,8 @@ public class UseItem implements Automation {
 
                 // Press desired key from panel
                 int waitTime = r.nextInt(200) + 1000;
-                try {
-                    Thread.sleep(waitTime);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(waitTime);
+
                 switch (this.keyToPress) {
                     case "space":
                         robot.keyPress(KeyEvent.VK_SPACE);
@@ -70,11 +63,7 @@ public class UseItem implements Automation {
 
                 // Wait for completion
                 int sleepTime = r.nextInt(1000) + this.timeToWait;
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(sleepTime);
 
                 // Set random movement times
                 int movementTimeTo;
@@ -95,10 +84,15 @@ public class UseItem implements Automation {
                 movementTimeTo = r.nextInt(200) + 750;
                 click(robot, "left", 854, 520, 5, 5, movementTimeTo);
 
-                if (this.itemCount == 3) {
+                if (this.itemCount >= 3) {
                     // Get third item
                     movementTimeTo = r.nextInt(200) + 750;
                     click(robot, "left", 900, 520, 5, 5, movementTimeTo);
+                }
+                if (this.itemCount >= 4) {
+                    // Get third item
+                    movementTimeTo = r.nextInt(200) + 750;
+                    click(robot, "left", 950, 520, 5, 5, movementTimeTo);
                 }
 
                 // Exit bank menu
@@ -112,11 +106,13 @@ public class UseItem implements Automation {
             }
         } catch (final AWTException e) {
             LOGGER.info(e.toString());
+        } catch (final InterruptedException ex) {
+            LOGGER.info("Script stopped");
         }
     }
 
     public static void click(Robot robot, String type, int xCoord, int yCoord, int maxXCoord, int maxYCoord,
-                             int movementTime) {
+                             int movementTime) throws InterruptedException {
         final Random r = new Random();
         int xNewOffset = 0;
         int yNewOffset = 0;
@@ -140,11 +136,7 @@ public class UseItem implements Automation {
         if (type.equals("left")) {
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-            try {
-                Thread.sleep(100);
-            } catch (final InterruptedException e) {
-                LOGGER.info(e.toString());
-            }
+            Thread.sleep(100);
         } else if (type.equals("right")) {
             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);

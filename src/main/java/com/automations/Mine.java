@@ -30,105 +30,67 @@ public class Mine implements Automation {
                     LOGGER.info(String.valueOf(debugCheckpoint.getY()));
                     LOGGER.info("running in debug mode");
 
-                    try {
-                        int sleep = r.nextInt(200) + 3000;
-                        Thread.sleep(sleep);
-                    } catch (final InterruptedException ex) {
-                        LOGGER.info("Script stopped");
-                    }
+                    int sleep = r.nextInt(200) + 3000;
+                    Thread.sleep(sleep);
                     continue;
                 }
 
                 // Run logic
                 for (int i = 0; i < 6; i++) {
                     mineThreeRocks(robot, r);
-                    try {
-                        Thread.sleep(1500);
-                    } catch (final InterruptedException ex) {
-                        LOGGER.info("Script stopped");
-                    }
+                    Thread.sleep(1500);
                 }
 
                 // Drop everything in inventory not in first row
                 dropInventory(robot, r);
 
                 // Sleep for given rate
-                try {
-                    int sleep = r.nextInt(200) + this.rate;
-                    Thread.sleep(sleep);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                int sleep = r.nextInt(200) + this.rate;
+                Thread.sleep(sleep);
             }
         } catch (final AWTException e) {
             LOGGER.info(e.toString());
+        } catch (final InterruptedException ex) {
+            LOGGER.info("Script stopped");
         }
     }
 
-    private static void mineThreeRocks(Robot robot, Random r) {
+    private static void mineThreeRocks(Robot robot, Random r) throws InterruptedException {
         int movementTimeTo = r.nextInt(100) + 300;
         final Point currentPoint = Automation.getCurrentPoint();
         Automation.mouseGlide(robot, (int) currentPoint.getX(), (int) currentPoint.getY(), 980, 430, movementTimeTo, 100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         // Wait for click to register
-        try {
-            Thread.sleep(200);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(200);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
-        try {
-            Thread.sleep(1500);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(1500);
 
         Automation.mouseGlide(robot, 980, 430, 1230, 630, movementTimeTo, 100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         // Wait for click to register
-        try {
-            Thread.sleep(200);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(200);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
-        try {
-            Thread.sleep(1500);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(1500);
 
         Automation.mouseGlide(robot, 1230, 630, 975, 895, movementTimeTo, 100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         // Wait for click to register
-        try {
-            Thread.sleep(200);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(200);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
-        try {
-            Thread.sleep(1500);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(1500);
     }
 
-    private static void dropInventory(Robot robot, Random r) {
+    private static void dropInventory(Robot robot, Random r) throws InterruptedException {
         Point startingPoint = Automation.getCurrentPoint();
         int movementTimeTo = r.nextInt(100) + 100;
         // Move mouse to first inventory tile
         Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
         robot.keyPress(KeyEvent.VK_SHIFT);
         // Wait for key press to register
-        try {
-            Thread.sleep(500);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(500);
 
         // Drop items for all rows
         Point currentPoint = Automation.getCurrentPoint();
@@ -140,11 +102,7 @@ public class Mine implements Automation {
             for (int x = 0; x <= 3; x++) {
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 // Wait for click to register
-                try {
-                    Thread.sleep(200);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(200);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                 Point xPoint = Automation.getCurrentPoint();
                 int newXPoint = (int) xPoint.getX() + 40;

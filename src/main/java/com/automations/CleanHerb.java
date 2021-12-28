@@ -22,11 +22,7 @@ public class CleanHerb implements Automation {
             while (true) {
                 final Random r = new Random();
                 int sleep = r.nextInt(200) + this.rate;
-                try {
-                    Thread.sleep(sleep);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(sleep);
 
                 Point point = Automation.getCurrentPoint();
                 LOGGER.info(String.valueOf(point.getX()));
@@ -64,10 +60,12 @@ public class CleanHerb implements Automation {
             }
         } catch (final AWTException e) {
             LOGGER.info(e.toString());
+        } catch (final InterruptedException ex) {
+            LOGGER.info("Script stopped");
         }
     }
 
-    private static void cleanInventory(Robot robot) {
+    private static void cleanInventory(Robot robot) throws InterruptedException {
         final Random r = new Random();
         Point startingPoint = Automation.getCurrentPoint();
         int movementTimeTo = r.nextInt(100) + 100;
@@ -85,11 +83,7 @@ public class CleanHerb implements Automation {
             for (int x = 0; x <= 3; x++) {
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 // Wait for click to register
-                try {
-                    Thread.sleep(200);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(200);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                 Point xPoint = Automation.getCurrentPoint();
                 int newXPoint = (int) xPoint.getX() + 40;
@@ -109,7 +103,7 @@ public class CleanHerb implements Automation {
     }
 
     public static void click(Robot robot, String type, int xCoord, int yCoord, int maxXCoord, int maxYCoord,
-                             int movementTime) {
+                             int movementTime) throws InterruptedException {
         final Random r = new Random();
         int xNewOffset = 0;
         int yNewOffset = 0;
@@ -133,11 +127,7 @@ public class CleanHerb implements Automation {
         if (type.equals("left")) {
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-            try {
-                Thread.sleep(100);
-            } catch (final InterruptedException e) {
-                LOGGER.info(e.toString());
-            }
+            Thread.sleep(100);
         } else if (type.equals("right")) {
             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);

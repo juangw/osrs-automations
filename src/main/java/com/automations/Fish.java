@@ -33,19 +33,11 @@ public class Fish implements Automation {
                 Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), (int) startingPoint.getX(), (int) startingPoint.getY() + 30, movementTimeDown, 200);
                 Point firstMenuOption = Automation.getCurrentPoint();
                 // Sleep while doing action
-                try {
-                    Thread.sleep(3000);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(3000);
 
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 // Wait for key press to register
-                try {
-                    Thread.sleep(500);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(500);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
                 Automation.mouseGlide(robot, (int) firstMenuOption.getX(), (int) firstMenuOption.getY(), (int) startingPoint.getX(), (int) startingPoint.getY(), movementTimeDown, 200);
@@ -53,11 +45,7 @@ public class Fish implements Automation {
                 robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
                 Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), (int) firstMenuOption.getX(), (int) firstMenuOption.getY(), movementTimeDown, 200);
                 // Sleep while filling up inventory
-                try {
-                    Thread.sleep(this.rate);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(this.rate);
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
@@ -71,11 +59,7 @@ public class Fish implements Automation {
                 }
 
                 // Sleep while running to next spot
-                try {
-                    Thread.sleep(3000);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(3000);
 
                 // Drop everything in inventory not in first row
                 switch(action) {
@@ -94,12 +78,14 @@ public class Fish implements Automation {
             }
         } catch (final AWTException e) {
             LOGGER.info(e.toString());
-        }  catch (final Exception e) {
+        } catch (final InterruptedException ex) {
+            LOGGER.info("Script stopped");
+        } catch (final Exception e) {
             LOGGER.info(e.toString());
         }
     }
 
-    private void useItem(Robot robot) {
+    private void useItem(Robot robot) throws InterruptedException {
         final Random r = new Random();
         Point startingPoint = Automation.getCurrentPoint();
         int movementTimeTo = r.nextInt(100) + 500;
@@ -107,11 +93,7 @@ public class Fish implements Automation {
         Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         // Wait for click to register
-        try {
-            Thread.sleep(200);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(200);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
         // Move mouse to second inventory tile
@@ -122,15 +104,11 @@ public class Fish implements Automation {
 
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         // Wait for click to register
-        try {
-            Thread.sleep(200);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(200);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
-    private static void dropInventory(Robot robot) {
+    private static void dropInventory(Robot robot) throws InterruptedException {
         final Random r = new Random();
         Point startingPoint = Automation.getCurrentPoint();
         int movementTimeTo = r.nextInt(100) + 100;
@@ -138,11 +116,7 @@ public class Fish implements Automation {
         Automation.mouseGlide(robot, (int) startingPoint.getX(), (int) startingPoint.getY(), 1720, 835, movementTimeTo, 100);
         robot.keyPress(KeyEvent.VK_SHIFT);
         // Wait for key press to register
-        try {
-            Thread.sleep(500);
-        } catch (final InterruptedException ex) {
-            LOGGER.info("Script stopped");
-        }
+        Thread.sleep(500);
 
         // Drop items for all rows
         Point currentPoint = Automation.getCurrentPoint();
@@ -154,11 +128,7 @@ public class Fish implements Automation {
             for (int x = 0; x <= 3; x++) {
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 // Wait for click to register
-                try {
-                    Thread.sleep(200);
-                } catch (final InterruptedException ex) {
-                    LOGGER.info("Script stopped");
-                }
+                Thread.sleep(200);
                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                 Point xPoint = Automation.getCurrentPoint();
                 int newXPoint = (int) xPoint.getX() + 40;
