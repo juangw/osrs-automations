@@ -15,16 +15,18 @@ public class LoggerInterceptor implements HandlerInterceptor {
   public boolean preHandle(
       HttpServletRequest request,
       HttpServletResponse response,
-      Object handler) throws Exception {
-    switch (request.getMethod()) {
+      Object handler
+  ) throws Exception {
+    String method = request.getMethod();
+    switch (method) {
       case "POST":
-        LOGGER.info("[request][" + request.getRequestURI() + "] " + "[" + request.getMethod()
+        LOGGER.info("[request][" + request.getRequestURI() + "] " + "[" + method
             + "] " + new ObjectMapper().writeValueAsString(request.getParameterMap()));
         break;
       case "GET":
       default:
-        LOGGER.info("[request][" + request.getRequestURI() + "] " + "[" + request.getMethod()
-            + "] ");
+        LOGGER.info("[request][" + request.getRequestURI() + "] " + "[" + method
+            + "] " + new ObjectMapper().writeValueAsString(request.getParameterMap()));
         break;
     }
     return true;
@@ -32,8 +34,8 @@ public class LoggerInterceptor implements HandlerInterceptor {
 
   @Override
   public void afterCompletion(
-      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-      throws Exception {
+      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex
+  ) throws Exception {
     if (ex != null) {
       ex.printStackTrace();
       LOGGER.error("[response][" + request.getRequestURI() + "][exception: " + ex + "]");
