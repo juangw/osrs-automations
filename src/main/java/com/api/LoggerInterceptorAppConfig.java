@@ -6,8 +6,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
 public class LoggerInterceptorAppConfig implements WebMvcConfigurer {
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoggerInterceptor());
-    }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(new LoggerInterceptor());
+  }
 }
